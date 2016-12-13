@@ -16,7 +16,7 @@ class CreateGradesTable extends Migration {
 			
 			$table->create();
 			$table->increments('id');
-			$table->string('description');
+			$table->string('description', 20);
 			$table->timestamps();
 		});
 	}

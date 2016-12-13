@@ -5,7 +5,7 @@ class ProposedHomeworkTableSeeder extends Seeder {
 	public function run()
 	{
 
-		DB::table('proposed_homework')->delete();
+		DB::table('proposed_homeworks')->delete();
 
 
 	}

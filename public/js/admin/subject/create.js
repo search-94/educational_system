@@ -11,7 +11,7 @@
       $("#server_msg").hide();
     	$("#error_msg").html('');
 
-      var re =  /^([a-zA-Z0-9_-°]){2,30}$/;
+      var re =  /^([a-zA-Z0-9_-°ñáéíóúü ]){2,30}$/;
       if (!re.test($("#name").val())) {
         $('#error_msg').html("<p>"+error_name+"</p>");
       }

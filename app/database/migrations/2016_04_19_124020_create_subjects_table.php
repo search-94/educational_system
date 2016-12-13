@@ -16,7 +16,7 @@ class CreateSubjectsTable extends Migration {
 			
 			$table->create();
 			$table->increments('id');
-			$table->string('name');
+			$table->string('name', 50);
 			$table->integer('id_grade')->unsigned();
 			$table->foreign('id_grade')->references('id')->on('grades');
 			$table->timestamps();

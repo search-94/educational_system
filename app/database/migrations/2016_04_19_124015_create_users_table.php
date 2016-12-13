@@ -18,10 +18,12 @@ class CreateUsersTable extends Migration {
 			
 			$table->create();
 			$table->increments('id');
-			$table->string('identity_card');
+			$table->integer('identity_card');
 			$table->string('password');
-			$table->string('first_name');
-			$table->string('second_name');
+			$table->string('first_name', 50);
+			$table->string('second_name', 50);
+			$table->integer('id_gender')->unsigned();
+			$table->foreign('id_gender')->references('id')->on('genders');
 			$table->integer('id_role')->unsigned();
 			$table->foreign('id_role')->references('id')->on('roles');
 			$table->integer('id_grade')->unsigned()->nullable();

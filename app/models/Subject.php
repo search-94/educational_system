@@ -38,7 +38,19 @@ class Subject extends Eloquent {
 
 	public function destroySubject($id_subject) {
 
-		$subject = Subject::find($id_subject);
+		$subject = Subject::find($id_subject)->delete();
 
+	}
+
+	public function getSubjects($id_grade) {
+
+		$subjects = Subject::where('id_grade', '=', $id_grade)->get();
+		return $subjects;
+	}
+
+	public function getSubject($id_subject) {
+
+		$subject = Subject::find($id_subject);
+		return $subject;
 	}
 }

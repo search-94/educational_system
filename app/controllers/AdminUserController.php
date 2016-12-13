@@ -12,48 +12,18 @@ class AdminUserController extends BaseController {
 	 */
 	public function getCreate()
 	{
+		$genders = Gender::all();
 		$roles = Role::all();
 		$grades = Grade::all();
-		return View::make('admin.user.create')->with('roles', $roles)->with('grades', $grades);
+		return View::make('admin.user.create')->with('genders', $genders)->with('roles', $roles)->with('grades', $grades);
 	}
-
-/*
-	public function upload()
-	{
-		$file = Input::file('file');
-		$destinationPath = public_path()."/uploads/";
-		// If the uploads fail due to file system, you can try doing public_path().'/uploads' 
-		$filename = $file->getClientOriginalName();
-		$extension =$file->getClientOriginalExtension(); 
-		$upload_success = Input::file('file')->move($destinationPath, $filename);
-
-		if( $upload_success ) {
-		   return Response::json('success', 200);
-		} else {
-		   return Response::json('error', 400);
-		}
-	}
-
-		public function download()
-	{
-
-        //PDF file is stored under project/public/download/info.pdf
-        $file= public_path()."/uploads/asd.docx";
-        $headers = array(
-              'Content-Type'=> 'application/msword',
-            );
-        return Response::download($file, 'filename.docx', $headers);
-
-	}
-*/
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
 	 * @return Response
 	 */
-	public function store()
-	{
+	public function store() {
 
 		$message = new MessageBag();
 		$user = new User();
@@ -86,8 +56,26 @@ class AdminUserController extends BaseController {
 	public function getShow()
 	{
 		$roles = Role::all();
+		$genders = Gender::all();
 		$grades = Grade::all();
-		return View::make('admin.user.show')->with('roles', $roles)->with('grades', $grades);
+		$id_usr = Auth::user()->id;
+
+		$users = User::all();
+		$ids = $users->lists('id');
+		$first_names = $users->lists('first_name');
+		$second_names = $users->lists('second_name');
+		$identity_cards = $users->lists('identity_card');
+
+
+		for ($i=0; $i<User::count(); $i++) {
+
+			$role = User::find($ids[$i])->role->description;
+			$names[$i] = $first_names[$i]." ".$second_names[$i]." - ".$identity_cards[$i]." (".$role.")";
+		}
+
+		$names = json_encode($names);
+
+		return View::make('admin.user.show')->with('genders', $genders)->with('roles', $roles)->with('grades', $grades)->with('id_usr', $id_usr)->with('names', $names);
 	}
 
 	public function info() {
@@ -100,20 +88,23 @@ class AdminUserController extends BaseController {
 		        if ($user = User::withTrashed()->where('identity_card', '=', $id)->firstOrFail()) {
 
 		        	$role = $user->role->description;
+		        	$gender = $user->gender->description;
 		        	if ($user->trashed()) {
+
 						$is_active = false;
 		        	} else {
+
 		        		$is_active = true;
 		        	}
 		        	
 		        	
 		        	if ($user->id_role == 3) {
 
-		        		$user_array = array('id' => $user->id, 'password' => $user->password, 'first_name' => $user->first_name, 'second_name' => $user->second_name, 'role' => $role, 'id_role' => $user->id_role, 'id_grade' => $user->id_grade, 'is_active' => $is_active);
+		        		$user_array = array('id' => $user->id, 'identity_card' => $user->identity_card, 'first_name' => $user->first_name, 'second_name' => $user->second_name, 'gender' => $gender, 'id_gender' => $user->id_gender, 'role' => $role, 'id_role' => $user->id_role, 'id_grade' => $user->id_grade, 'is_active' => $is_active);
 		        	
 		        	} else {
 
-		        		$user_array = array('id' => $user->id, 'password' => $user->password, 'first_name' => $user->first_name, 'second_name' => $user->second_name, 'role' => $role, 'id_role' => $user->id_role, 'is_active' => $is_active);
+		        		$user_array = array('id' => $user->id, 'identity_card' => $user->identity_card, 'first_name' => $user->first_name, 'second_name' => $user->second_name, 'gender' => $gender, 'id_gender' => $user->id_gender, 'role' => $role, 'id_role' => $user->id_role, 'is_active' => $is_active);
 		        	}
 
 		        	echo json_encode($user_array);
@@ -124,17 +115,6 @@ class AdminUserController extends BaseController {
 			}
 	    }
 	        
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function getEdit($id)
-	{
-		//
 	}
 
 
@@ -174,20 +154,36 @@ class AdminUserController extends BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
-	{
-		$user = User::find($id);
-		$user->delete();
-		Session::flash('message', 'usuario eliminado correctamente');
-		Session::flash('class', 'success');
-		return Redirect::to('admin/user/show');
+	public function destroy($id_user) {
+
+		$user = new User();
+		$deleted_user = User::find($id_user);
+		//if the user is teacher, deletes all relations between teacher and subjects
+		if ($deleted_user->id_role == 2) {
+
+			$user_subjects = new UserSubject();
+			$destroy_user_subjects = $user_subjects->destroyUserSubjectByUser($id_user);
+		}
+		//if the user is student, deletes all the done homeworks
+		else if ($deleted_user->id_role == 3) {
+
+			$done_homeworks = new DoneHomework();
+			$destroy_done_homeworks = $done_homeworks->destroyStudentDoneHomeworks($id_user);
+		}
+
+		if ($user->destroyUser($id_user)) {
+
+			Session::flash('message', Lang::get('admin.user.deleted_successfully'));
+			Session::flash('class', 'success');
+			return Redirect::to('admin/user/show');
+		}
 	}
 
 	public function restore() {
 
 		$message = new MessageBag();
 		$input = Input::all();
-		$user = new User;
+		$user = new User();
 
 		$result = $user->restoreReject($input);
 		if ($result) {

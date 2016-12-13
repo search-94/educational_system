@@ -32,11 +32,12 @@ class UserLoginController extends BaseController {
 
 					return Redirect::to('student/index');
 
-				}
-				
-			}
+				} else if (Auth::user()->id_role == 4) {
 
-			else {
+					return Redirect::to('coordinator/index');
+				}
+
+			} else {
 
 				Session::flash('fail_log', true);
 				return Redirect::to('login');

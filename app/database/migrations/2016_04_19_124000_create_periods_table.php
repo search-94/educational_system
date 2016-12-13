@@ -20,7 +20,6 @@ class CreatePeriodsTable extends Migration {
 			$table->increments('id');
 			$table->integer('year');
 			$table->integer('lapse');
-			$table->boolean('is_active');
 			$table->timestamps();
 			$table->softDeletes();
 		});

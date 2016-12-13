@@ -20,15 +20,18 @@
   </head>
 
   <body>
-    @if (Session::get('fail_log')==true)
-      <div class="alert alert-danger" role="alert">Validación incorrecta</div>
-    @endif
+   <center> <h2>Plataforma de Gestión de Contenidos y Evaluaciones</h2> </center>
+      <center> <h2>Colegio Jesús de Nazaret</h2> </center>
     <div class="container">
-      {{Form::open(array('url'=>'login','class'=>'form-signin'));}}
+      {{Form::open(array('url'=>'login','class'=>'form-signin'))}}
         <h2 class="form-signin-heading">Bienvenido</h2>
-        {{Form::text('identity_card', null, array('placeholder'=>'ID', 'class'=>'form-control', 'maxlength'=>30, 'required'=>'true', 'autofocus'=>'true'));}} <br>
-        {{Form::password('password', array('placeholder'=>'Contraseña', 'class'=>'form-control', 'required'=>'true'));}}<br>
+        {{Form::text('identity_card', null, array('placeholder'=>'ID', 'class'=>'form-control', 'maxlength'=>30, 'required'=>'true', 'autofocus'=>'true'))}} <br>
+        {{Form::password('password', array('placeholder'=>'Contraseña', 'class'=>'form-control', 'required'=>'true'))}}<br>
         {{Form::submit('Ingresar', array('class'=>'btn btn-lg btn-primary btn-block'))}}
+        <br>
+        @if (Session::get('fail_log')==true)
+          <div class="alert alert-danger" role="alert">@lang('common.error_validation')</div>
+        @endif
       {{Form::close()}}
 
     </div> <!-- /container -->

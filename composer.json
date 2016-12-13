@@ -6,7 +6,8 @@
 	"type": "project",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"twitter/bootstrap": "3.*@dev"
+		"twitter/bootstrap": "3.*@dev",
+		"thujohn/pdf": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

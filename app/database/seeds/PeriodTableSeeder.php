@@ -10,7 +10,6 @@ class PeriodTableSeeder extends Seeder {
 		Period::create(array(
 			'year' => '2015',
 			'lapse' => '3',
-			'is_active' => 'false'
 		));
 
 	}

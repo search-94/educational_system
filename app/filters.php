@@ -113,3 +113,11 @@ Route::filter('student', function()
 		return Redirect::to('login');
 	}
 });
+
+Route::filter('coordinator', function() 
+{
+	if(Auth::user()->id_role != 4)
+	{
+		return Redirect::to('login');
+	}
+});

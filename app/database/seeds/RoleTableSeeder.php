@@ -19,6 +19,9 @@ class RoleTableSeeder extends Seeder {
 			'Description' => 'Estudiante',
 		));		
 
+		Role::create(array(
+			'Description' => 'Coordinador',
+		));		
 
 	}
 

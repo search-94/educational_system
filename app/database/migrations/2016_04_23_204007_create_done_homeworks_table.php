@@ -20,10 +20,9 @@ class CreateDoneHomeworksTable extends Migration {
 			$table->foreign('id_proposed_homework')->references('id')->on('proposed_homeworks');
 			$table->integer('id_user')->unsigned();
 			$table->foreign('id_user')->references('id')->on('users');
-			$table->string('name');
 			$table->string('route')->unique;
 			$table->integer('score')->nullable();		
-			$table->text('observations')->nullable();
+			$table->string('observations')->nullable();
 			$table->timestamps();	
 		});
 	}

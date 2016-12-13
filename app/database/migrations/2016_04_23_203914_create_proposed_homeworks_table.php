@@ -18,11 +18,10 @@ class CreateProposedHomeworksTable extends Migration {
 			$table->increments('id');
 			$table->integer('id_subject')->unsigned();
 			$table->foreign('id_subject')->references('id')->on('subjects');
-			$table->integer('id_period')->unsigned();
-			$table->foreign('id_period')->references('id')->on('periods');	
-			$table->string('name');
+			$table->string('name', 100);
 			$table->string('route')->unique();
-			$table->boolean('is_active');
+			$table->integer('weighing');
+			$table->date('culmination_date');
 			$table->timestamps();		
 		});
 	}

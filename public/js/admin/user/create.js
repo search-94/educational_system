@@ -1,4 +1,4 @@
-  $('document').ready(function() {
+    $('document').ready(function() {
 
     //darkens the users tab
     $("#users").attr('class', 'dropdown active');
@@ -7,11 +7,11 @@
     $("#id_role").change(function() {
 
       if ($("#id_role").val() == "3") {
-        $("#grade_container").attr('class', '');
+        $("#grade_container").attr('style', 'display:block');
 
       } else {
 
-        $("#grade_container").attr('class', 'hidden');
+        $("#grade_container").attr('style', 'display:none');
         $("#id_grade").val("");
       }
     });
@@ -29,12 +29,7 @@
           $('#error_msg').html("<p>"+error_identity_card+"</p>");
         }
 
-        var re =  /^([a-zA-Z0-9_-]){5,10}$/;
-        if (!re.test($("#password").val())) {
-          $('#error_msg').html($('#error_msg').html()+"<p>"+error_password+"</p>");
-        }
-
-        var re = /^([A-Za-zñáéíóúü]){2,30}$/;
+        var re = /^([A-Za-zñáéíóúüÁÉÍÓÚ ]){2,30}$/;
         if (!re.test($("#first_name").val())) {
           $("#error_msg").html($('#error_msg').html()+"<p>"+error_first_name+"</p>");
         }
@@ -42,6 +37,11 @@
         if (!re.test($("#second_name").val())) {
           $("#error_msg").html($('#error_msg').html()+"<p>"+error_second_name+"</p>");
         }
+
+        if ($("#id_gender").val() == "") {
+
+          $('#error_msg').html($('#error_msg').html()+"<p>"+error_gender+"</p>");
+        }         
 
         if ($("#id_role").val() == "") {
 
